@@ -6,7 +6,7 @@ s = "insert into student (s1,sn)values{0}".format((14231088,'gggg'))
 #cur.execute(s)
 cur.execute("SELECT * FROM student")
 conn.commit()
-rest=cur.fetchall();
+rest=cur.fetchall()
 for r in rest:
            print(r)
 
