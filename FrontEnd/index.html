@@ -20,7 +20,7 @@
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar transparent navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -41,40 +41,154 @@
     </div>
 </nav>
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12" id="header-image">
+        </div>
+    </div>
+</div>
+
 <div class="container">
-    <div class="first-impression">
-        <h1>May I have your name please?</h1>
-        <p class="lead">Tell me your name so I get to know you better</p>
-        <form method="post" enctype="multipart/form-data" action="">
+    <form id="form" method="post" enctype="multipart/form-data" action="">
+        <div class="first-impression">
+            <h1>May I have your name please?</h1>
+            <p class="lead">Tell me your name so I get to know you better</p>
             <div class="form-group">
                 <input type="text" class="form-control" id="name" name="User's Name" placeholder="Your Full Name" required><br>
             </div>
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uni-info" >Submit</button>
-        </form>
-    </div>
-    <div class="first-impression">
-        <div class="collapse" id="uni-info">
-            <h1>And which universities are you thinking of applying?</h1>
-            <form method="post" enctype="multipart/form-data" action="">
-                <div class="form-group">
-                    <select class="form-control" id="uni" name="User's Name" required>
-                        <option>University of California, Berkeley</option>
-                        <option>Stanford University</option>
-                        <option>Carnegie Mellon University</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uni-info">Submit</button>
         </div>
+            <div class="first-impression">
+            <div class="collapse" id="uni-info">
+                <h1>And which universities are you thinking of applying?</h1>
+                <p class="lead">There is nothing wrong with thinking big I guess</p>
+                    <div class="form-group">
+                        <select class="form-control" id="uni" name="User's Name" required>
+                            <option>University of California, Berkeley</option>
+                            <option>Stanford University</option>
+                            <option>Carnegie Mellon University</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#grade-info">Submit</button>
+            </div>
+        </div>
+        <div class="first-impression">
+            <div class="collapse" id="grade-info">
+                <h1>Now I need your GRE and TOEFL score</h1>
+                <p class="lead">Just leave it blank if you haven't taken those tests</p>
+                    <div class="form-group">
+                        <label for="GREVerbal" class="col-xs-2 control-label">GRE Verbal</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="GREVerbal" name="GREVerbal" placeholder="170" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="GREQuantitative" class="col-xs-2 control-label">GRE Quantitative</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="GREQuantitative" name="GREQuantitative" placeholder="170" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="GREAW" class="col-xs-2 control-label">GRE Analytical Writing</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="GREAW" name="GREAW" placeholder="6" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLR" class="col-xs-2 control-label">TOEFL Reading</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="TOEFLR" name="TOEFLR" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLL" class="col-xs-2 control-label">TOEFL Listening</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="TOEFLL" name="TOEFLL" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLS" class="col-xs-2 control-label">TOEFL Speaking</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="TOEFLS" name="TOEFLS" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLW" class="col-xs-2 control-label">TOEFL Writing</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" id="TOEFLW" name="TOEFLW" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <canvas height="400"></canvas>
     </div>
 </div><!-- /.container -->
 
+<script>
+    $(function() {
+        $('button').click(function() {
+            $.ajax({
+                url: '/signUpUser',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    function drawCheck() {
+        var start = 100;
+        var mid = 145;
+        var end = 250;
+        var width = 22;
+        var leftX = start;
+        var leftY = start;
+        var rightX = mid - (width / 2.7);
+        var rightY = mid + (width / 2.7);
+        var animationSpeed = 20;
+
+        var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+        ctx.lineWidth = width;
+        ctx.strokeStyle = 'rgba(0, 150, 0, 1)';
+
+        for (i = start; i < mid; i++) {
+            var drawLeft = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(start, start);
+                ctx.lineTo(leftX, leftY);
+                ctx.stroke();
+                leftX++;
+                leftY++;
+            }, 1 + (i * animationSpeed) / 3);
+        }
+
+        for (i = mid; i < end; i++) {
+            var drawRight = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(leftX, leftY);
+                ctx.lineTo(rightX, rightY);
+                ctx.stroke();
+                rightX++;
+                rightY--;
+            }, 1 + (i * animationSpeed) / 3);
+        }
+    }
+</script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="js/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

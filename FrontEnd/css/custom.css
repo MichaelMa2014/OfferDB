@@ -3,7 +3,16 @@ body {
 }
 
 .first-impression {
-    padding: 40px 100px;
+    padding: 40px 120px;
+    text-align: center;
+}
+
+#header-image {
+    background-image: url("../img/index.jpg");
+    background-position: center;
+    background-size: 100%;
+    height: 300px;
+    padding: 40px 120px;
     text-align: center;
 }
 
