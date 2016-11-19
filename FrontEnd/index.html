@@ -43,7 +43,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12" id="test"></div>
+        <div class="col-xs-12" id="header-image">
+        </div>
     </div>
 </div>
 
@@ -96,25 +97,25 @@
                     <div class="form-group">
                         <label for="TOEFLR" class="col-xs-2 control-label">TOEFL Reading</label>
                         <div class="col-xs-10">
-                            <input type="text" class="form-control" id="TOEFLR" name="TOEFLR" placeholder="170" required><br>
+                            <input type="text" class="form-control" id="TOEFLR" name="TOEFLR" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="TOEFLL" class="col-xs-2 control-label">TOEFL Listening</label>
                         <div class="col-xs-10">
-                            <input type="text" class="form-control" id="TOEFLL" name="TOEFLL" placeholder="170" required><br>
+                            <input type="text" class="form-control" id="TOEFLL" name="TOEFLL" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="TOEFLS" class="col-xs-2 control-label">TOEFL Speaking</label>
                         <div class="col-xs-10">
-                            <input type="text" class="form-control" id="TOEFLS" name="TOEFLS" placeholder="6" required><br>
+                            <input type="text" class="form-control" id="TOEFLS" name="TOEFLS" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="TOEFLW" class="col-xs-2 control-label">TOEFL Writing</label>
                         <div class="col-xs-10">
-                            <input type="text" class="form-control" id="TOEFLW" name="TOEFLW" placeholder="6" required><br>
+                            <input type="text" class="form-control" id="TOEFLW" name="TOEFLW" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
@@ -123,12 +124,64 @@
             </div>
         </div>
     </form>
+    <div>
+        <canvas height="400"></canvas>
+    </div>
 </div><!-- /.container -->
 
 <script>
-    function GetInputs() {
-        var name = document.getElementById("name-form");
+    $(function() {
+        $('button').click(function() {
+            $.ajax({
+                url: '/signUpUser',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
 
+    function drawCheck() {
+        var start = 100;
+        var mid = 145;
+        var end = 250;
+        var width = 22;
+        var leftX = start;
+        var leftY = start;
+        var rightX = mid - (width / 2.7);
+        var rightY = mid + (width / 2.7);
+        var animationSpeed = 20;
+
+        var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+        ctx.lineWidth = width;
+        ctx.strokeStyle = 'rgba(0, 150, 0, 1)';
+
+        for (i = start; i < mid; i++) {
+            var drawLeft = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(start, start);
+                ctx.lineTo(leftX, leftY);
+                ctx.stroke();
+                leftX++;
+                leftY++;
+            }, 1 + (i * animationSpeed) / 3);
+        }
+
+        for (i = mid; i < end; i++) {
+            var drawRight = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(leftX, leftY);
+                ctx.lineTo(rightX, rightY);
+                ctx.stroke();
+                rightX++;
+                rightY--;
+            }, 1 + (i * animationSpeed) / 3);
+        }
     }
 </script>
 
