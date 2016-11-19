@@ -16,6 +16,8 @@
 
     <!-- Custom styles for this template -->
     <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/jquery.min.js"></script>
 </head>
 
 <body>
@@ -43,7 +45,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12" id="header-image">
+        <div class="col-sm-12" id="header-image">
         </div>
     </div>
 </div>
@@ -77,67 +79,120 @@
                 <h1>Now I need your GRE and TOEFL score</h1>
                 <p class="lead">Just leave it blank if you haven't taken those tests</p>
                     <div class="form-group">
-                        <label for="GREVerbal" class="col-xs-2 control-label">GRE Verbal</label>
-                        <div class="col-xs-10">
+                        <label for="GREVerbal" class="col-sm-2 control-label">GRE Verbal</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="GREVerbal" name="GREVerbal" placeholder="170" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="GREQuantitative" class="col-xs-2 control-label">GRE Quantitative</label>
-                        <div class="col-xs-10">
+                        <label for="GREQuantitative" class="col-sm-2 control-label">GRE Quantitative</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="GREQuantitative" name="GREQuantitative" placeholder="170" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="GREAW" class="col-xs-2 control-label">GRE Analytical Writing</label>
-                        <div class="col-xs-10">
+                        <label for="GREAW" class="col-sm-2 control-label">GRE Analytical Writing</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="GREAW" name="GREAW" placeholder="6" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="TOEFLR" class="col-xs-2 control-label">TOEFL Reading</label>
-                        <div class="col-xs-10">
+                        <label for="TOEFLR" class="col-sm-2 control-label">TOEFL Reading</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="TOEFLR" name="TOEFLR" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="TOEFLL" class="col-xs-2 control-label">TOEFL Listening</label>
-                        <div class="col-xs-10">
+                        <label for="TOEFLL" class="col-sm-2 control-label">TOEFL Listening</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="TOEFLL" name="TOEFLL" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="TOEFLS" class="col-xs-2 control-label">TOEFL Speaking</label>
-                        <div class="col-xs-10">
+                        <label for="TOEFLS" class="col-sm-2 control-label">TOEFL Speaking</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="TOEFLS" name="TOEFLS" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="TOEFLW" class="col-xs-2 control-label">TOEFL Writing</label>
-                        <div class="col-xs-10">
+                        <label for="TOEFLW" class="col-sm-2 control-label">TOEFL Writing</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="TOEFLW" name="TOEFLW" placeholder="30" required><br>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button id="submit-button" type="submit" class="btn btn-primary" data-toggle="collapse" data-target="#result">
+                            Submit
+                        </button>
                     </div>
             </div>
         </div>
     </form>
-    <div>
-        <canvas height="400"></canvas>
+    <div class="first-impression " id="result-out">
+    <div class="collapse" id="result">
+        <h1>I found someone with scores close to you</h1>
+        <p class="lead">He is admitted</p>
+        <div class="row" style="text-align: left;">
+            <div class="col-sm-4">
+                <img class="img-responsive" src="img/Avatar.jpg">
+            </div>
+            <div class="col-sm-6">
+                <table class="table">
+                    <tr class="active">
+                        <td>John Appleseed</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>GRE Verbal</td>
+                        <td>168</td>
+                    </tr>
+                    <tr>
+                        <td>GRE Quantitative</td>
+                        <td>170</td>
+                    </tr>
+                    <tr>
+                        <td>GRE Analytical Writing</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Reading</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Listening</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Speaking</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Writing</td>
+                        <td>25</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-2">
+                <canvas height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
     </div>
 </div><!-- /.container -->
 
 <script>
     $(function() {
-        $('button').click(function() {
+        $('#form').submit(function(event) {
+            event.preventDefault();
+
             $.ajax({
-                url: '/signUpUser',
+                url: 'http://219.224.134.225:5000/signUpUser',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
+                    DrawCheck();
                 },
                 error: function(error) {
                     console.log(error);
@@ -146,7 +201,13 @@
         });
     });
 
-    function drawCheck() {
+    $(".btn").click(function() {
+        $('html, body').animate({
+            scrollTop: $("#result-out").offset().top
+        }, 1000);
+    });
+
+    function DrawCheck() {
         var start = 100;
         var mid = 145;
         var end = 250;
@@ -188,7 +249,6 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
