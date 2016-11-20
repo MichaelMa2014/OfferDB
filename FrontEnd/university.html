@@ -76,7 +76,7 @@
                     <button id="submit-button" type="submit" class="btn btn-primary">
                         Log in
                     </button>
-                    <button id="register-button" type="button" class="btn btn-danger">
+                    <button id="register-button" type="button" class="btn btn-danger" data-toggle="modal" data-target="#register-modal">
                         Register
                     </button>
                 </div>
@@ -84,6 +84,61 @@
         </div>
     </form>
 </div><!-- /.container -->
+
+<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Register now</h4>
+            </div>
+            <form id="form">
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="new-username" class="control-label">Username</label>
+                        <input type="text" class="form-control" id="new-username" name="new-username">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password" class="control-label">Password</label>
+                        <input type="password" class="form-control" id="new-password" name="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-email" class="control-label">Email</label>
+                        <input type="email" class="form-control" id="new-email" name="new-email">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $('#form').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: 'http://219.224.134.225:5000/signUpUni',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    if(response == 0) {
+                        console.log("success");
+                        window.location.href = "http://stackoverflow.com";
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
 
 
 <!-- Bootstrap core JavaScript
