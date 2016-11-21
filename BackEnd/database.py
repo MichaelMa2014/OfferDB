@@ -109,6 +109,18 @@ def add_std_user(name,password,gender):
 
 add_std_user("jinshenandy","jinshenandy","male")
 
+args = (2,)
+cur.callproc("get_grade_by_id",args)
+ret = cur.fetchall()
+for it in ret:
+    print(it)
+
+show("graduate")
+show("general_info")
+delet_graduate(5)
+show("general_info")
+show("graduate")
+
 #delet("user","userId = 1")
 
 #add_user(1,"peter","12dfdf@","PU.163.com")
