@@ -38,6 +38,9 @@
                 <li class="active"><a href="index.html">Home</a></li>
                 <li><a href="university.html">I am a professor or university representative</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="username">Username</a></li>
+            </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
@@ -56,6 +59,7 @@
             <p class="lead">Tell me your name so I get to know you better</p>
             <div class="form-group">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Your Full Name" required>
+                <!--TODO Press ENTER here should also toggle collapse-->
             </div>
             <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uni-info">Submit</button>
         </div>
@@ -68,6 +72,10 @@
                             <option>University of California, Berkeley</option>
                             <option>Stanford University</option>
                             <option>Carnegie Mellon University</option>
+                            <option>Massachusetts Institute of Technology</option>
+                            <option>Princeton University</option>
+                            <option>Harvard University</option>
+                            <option>Yale University</option>
                         </select>
                     </div>
                     <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#grade-info">Submit</button>
@@ -130,12 +138,12 @@
     <div class="first-impression " id="result-out">
     <div class="collapse" id="result">
         <h1>I found someone with scores close to you</h1>
-        <p class="lead">He is admitted</p>
-        <div class="row" style="text-align: left;">
+        <p class="lead" id="result-message">He is admitted</p>
+        <div class="row">
             <div class="col-sm-4">
                 <img class="img-responsive" src="img/Avatar.jpg">
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="text-align: left;">
                 <table class="table">
                     <tr class="active">
                         <td>John Appleseed</td>
@@ -172,6 +180,7 @@
                 </table>
             </div>
             <div class="col-sm-2">
+                <img id="result-icon" class="img-responsive">
                 <canvas height="400"></canvas>
             </div>
         </div>
@@ -180,30 +189,139 @@
     </div>
 </div><!-- /.container -->
 
+<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Register now to access more information</h4>
+            </div>
+            <form id="register-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="new-username" class="control-label">Username</label>
+                        <input type="text" class="form-control" id="new-username" name="new-username">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password" class="control-label">Password</label>
+                        <input type="password" class="form-control" id="new-password" name="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password" class="control-label">Repeat Password</label>
+                        <input type="password" class="form-control" id="new-repeat-password" name="new-repeat-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-gender" class="control-label">Gender</label>
+                        <input type="text" class="form-control" id="new-gender" name="new-gender">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-tel" class="control-label">Cellphone</label>
+                        <input type="text" class="form-control" id="new-tel" name="new-tel">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="success-label">Success</h4>
+            </div>
+            <div class="modal-body">
+                Welcome to OfferDB!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="fail-modal" tabindex="-1" role="dialog" aria-labelledby="success-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="fail-label">Error</h4>
+            </div>
+            <div class="modal-body" id="error-message">
+                Please choose another username.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(function() {
         $('#form').submit(function(event) {
             event.preventDefault();
 
             $.ajax({
-                url: 'http://219.224.134.225:5000/signUpUser',
+                url: 'http://192.168.20.91:5000/signUpUser',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
-                    DrawCheck();
+                    if (response == 0) {
+                        $('#result-message').html('He is not admitted');
+                        $('#result-icon').attr("src", "img/Red.jpg");
+                    }
+                    else {
+                        DrawCheck();
+                    }
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
+
+            setTimeout(function() {$('#register-modal').modal('show');}, 2000);
+        });
+
+        $('#register-form').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: 'http://192.168.20.91:5000/stSignUp',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    if (response == 0) {
+                        $('#register-modal').modal('hide');
+                        $('#username').html($('#new-username').val());
+                        $('#success-modal').modal('show');
+                    }
+                    else {
+                        if (response == -1) {
+                            $('#fail-modal').modal('show');
+                            //TODO display different error message
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
         });
     });
 
-    $(".btn").click(function() {
+    $(".btn-primary").click(function() {
         $('html, body').animate({
             scrollTop: $("#result-out").offset().top
-        }, 1000);
+        }, 100);
     });
 
     function DrawCheck() {
