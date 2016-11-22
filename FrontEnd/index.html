@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Database of US University Offer">
-    <meta name="author" content="Shen Jin, Michael Ma">
+    <meta name="author" content="Andy Jin, Michael Ma">
     <link rel="icon" href="">
 
     <title>Offer DB</title>
@@ -309,7 +309,7 @@
                 timeout: 100
             });
 
-            setTimeout(function() {$('#register-modal').modal('show');}, 2000);
+            setTimeout(function() {$('#register-modal').modal('show');}, 5000);
         });
 
         $('#login-form').submit(function (event) {
@@ -324,7 +324,10 @@
                     if (response == 0) {
                         $('#login-modal').modal('hide');
                         $('#nav-username').html($('#username').val());
+                        $('#nav-username').attr('href', 'user.html');
                         $('#success-modal').modal('show');
+                        document.cookie="username="+$('#username').val();
+                        window.location.href = 'university-info.html';
                     }
                     else {
                         if (response == -1) {
@@ -336,7 +339,7 @@
                 error: function(error) {
                     console.log(error);
                     $('#login-error-div').attr('class', "alert alert-danger");
-                    $('#login-error-message').html('Could not connect to server');
+                    $('#login-error-message').html('Could not connect to server.');
                 },
                 timeout: 100
             });
@@ -344,9 +347,6 @@
 
         $('#register-form').submit(function(event) {
             event.preventDefault();
-
-            document.cookie = $('#new-username').val();
-            window.location.href = "university-info.html"
 
             $.ajax({
                 url: 'http://192.168.20.91:5000/stSignUp',
@@ -356,8 +356,11 @@
                     console.log(response);
                     if (response == 0) {
                         $('#register-modal').modal('hide');
-                        $('#username').html($('#new-username').val());
+                        $('#nav-username').html($('#new-username').val());
                         $('#success-modal').modal('show');
+                        $('#nav-username').attr('href', 'user.html');
+                        document.cookie="username="+$('#new-username').val();
+                        window.location.href = 'university-info.html';
                     }
                     else {
                         $('#register-error-div').attr('class', "alert alert-danger");
@@ -367,11 +370,10 @@
                 error: function(error) {
                     console.log(error);
                     $('#register-error-div').attr('class', "alert alert-danger");
-                    $('#register-error-message').html('Could not connect to server  ');
+                    $('#register-error-message').html('Could not connect to server.');
                 },
                 timeout: 100
             });
-
         });
     });
 
