@@ -121,7 +121,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="new-username" class="control-label">Username</label>
+                    <label for="new-username" class="control-label">Full Name</label>
                     <input type="text" class="form-control" id="new-username" name="new-username">
                 </div>
                 <div class="form-group">
@@ -167,21 +167,48 @@
     </div>
 </div>
 
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted" id="general-info">Place sticky footer content here.</p>
+    </div>
+</footer>
+
 <script>
+    function load_general_info() {
+        $.ajax({
+            url: 'http://192.168.20.91:5000/generalInfo',
+            data: '',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+
+                $('#general-info').html('OfferDB: ' + data['userNo'] + ' Users, ' + data['graduateNo'] + ' Graduates, ' + data['professorNo'] + ' Professors, ' + data['universityNo'] + ' Universities');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
     $(function() {
+//        window.setInterval(load_general_info, 1000);
+
         $('#login-form').submit(function (event) {
             event.preventDefault();
 
             $.ajax({
                 url: 'http://192.168.20.91:5000/puLogin',
-                data: $('form').serialize(),
+                data: $('#login-form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
                     if (response == 0) {
-                        $('#success-modal').modal('show');
                         $('#nav-username').html($('#username').val());
-                        $('#success-modal').modal('show');
+                        $('#nav-username').attr('href', 'university-in.html');
+                        document.cookie="username="+$('#username').val();
+                        window.location.href='university-in.html';
                     }
                     else {
                         if (response == -1) {
@@ -208,7 +235,10 @@
                 success: function(response) {
                     console.log(response);
                     if(response == 0) {
-                        $('#nav-username').html($('#username').val());
+                        $('#nav-username').html($('#new-username').val());
+                        $('#nav-username').attr('href', 'university-in.html');
+                        document.cookie = "username=" + $('#new-username').val();
+                        window.location.href = 'university-in.html';
                     }
                     else {
                         $('#register-error-div').attr('class', "alert alert-danger");

@@ -58,6 +58,24 @@
 
 
 <script>
+    function load_general_info() {
+        $.ajax({
+            url: 'http://192.168.20.91:5000/generalInfo',
+            data: '',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+
+                $('#general-info').html('OfferDB: ' + data['userNo'] + ' Users, ' + data['graduateNo'] + ' Graduates, ' + data['professorNo'] + ' Professors, ' + data['universityNo'] + ' Universities');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
     $(function() {
         $('#form').submit(function(event) {
             event.preventDefault();
@@ -75,6 +93,8 @@
                 },
                 error: function(error) {
                     console.log(error);
+        load_general_info();
+        window.setInterval(load_general_info, 1000);
                 }
             });
         });
