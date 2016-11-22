@@ -16,11 +16,13 @@
 
     <!-- Custom styles for this template -->
     <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/jquery.min.js"></script>
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar transparent navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -29,52 +31,223 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Offer DB</a>
+            <a class="navbar-brand" href="index.html">Offer DB</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="university.html">I am a professor or university representative</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
 
-<div class="container">
-    <div class="first-impression">
-        <h1>May I have your name please?</h1>
-        <p class="lead">Tell me your name so I get to know you better</p>
-        <form method="post" enctype="multipart/form-data" action="">
-            <div class="form-group">
-                <input type="text" class="form-control" id="name" name="User's Name" placeholder="Your Full Name" required><br>
-            </div>
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uni-info" >Submit</button>
-        </form>
-    </div>
-    <div class="first-impression">
-        <div class="collapse" id="uni-info">
-            <h1>And which universities are you thinking of applying?</h1>
-            <form method="post" enctype="multipart/form-data" action="">
-                <div class="form-group">
-                    <select class="form-control" id="uni" name="User's Name" required>
-                        <option>University of California, Berkeley</option>
-                        <option>Stanford University</option>
-                        <option>Carnegie Mellon University</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12" id="header-image">
         </div>
+    </div>
+</div>
+
+<div class="container">
+    <form id="form">
+        <div class="first-impression">
+            <h1>May I have your name please?</h1>
+            <p class="lead">Tell me your name so I get to know you better</p>
+            <div class="form-group">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Your Full Name" required>
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uni-info">Submit</button>
+        </div>
+            <div class="first-impression">
+            <div class="collapse" id="uni-info">
+                <h1>And which universities are you thinking of applying?</h1>
+                <p class="lead">There is nothing wrong with thinking big I guess</p>
+                    <div class="form-group">
+                        <select class="form-control" id="uni" name="uni" required>
+                            <option>University of California, Berkeley</option>
+                            <option>Stanford University</option>
+                            <option>Carnegie Mellon University</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#grade-info">Submit</button>
+            </div>
+        </div>
+        <div class="first-impression">
+            <div class="collapse" id="grade-info">
+                <h1>Now I need your GRE and TOEFL score</h1>
+                <p class="lead">Just leave it blank if you haven't taken those tests</p>
+                    <div class="form-group">
+                        <label for="GREVerbal" class="col-sm-2 control-label">GRE Verbal</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="GREVerbal" name="GREVerbal" placeholder="170" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="GREQuantitative" class="col-sm-2 control-label">GRE Quantitative</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="GREQuantitative" name="GREQuantitative" placeholder="170" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="GREAW" class="col-sm-2 control-label">GRE Analytical Writing</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="GREAW" name="GREAW" placeholder="6" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLR" class="col-sm-2 control-label">TOEFL Reading</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="TOEFLR" name="TOEFLR" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLL" class="col-sm-2 control-label">TOEFL Listening</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="TOEFLL" name="TOEFLL" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLS" class="col-sm-2 control-label">TOEFL Speaking</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="TOEFLS" name="TOEFLS" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TOEFLW" class="col-sm-2 control-label">TOEFL Writing</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="TOEFLW" name="TOEFLW" placeholder="30" required><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="submit-button" type="submit" class="btn btn-primary" data-toggle="collapse" data-target="#result">
+                            Submit
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </form>
+    <div class="first-impression " id="result-out">
+    <div class="collapse" id="result">
+        <h1>I found someone with scores close to you</h1>
+        <p class="lead">He is admitted</p>
+        <div class="row" style="text-align: left;">
+            <div class="col-sm-4">
+                <img class="img-responsive" src="img/Avatar.jpg">
+            </div>
+            <div class="col-sm-6">
+                <table class="table">
+                    <tr class="active">
+                        <td>John Appleseed</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>GRE Verbal</td>
+                        <td>168</td>
+                    </tr>
+                    <tr>
+                        <td>GRE Quantitative</td>
+                        <td>170</td>
+                    </tr>
+                    <tr>
+                        <td>GRE Analytical Writing</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Reading</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Listening</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Speaking</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td>TOEFL Writing</td>
+                        <td>25</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-2">
+                <canvas height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
     </div>
 </div><!-- /.container -->
 
+<script>
+    $(function() {
+        $('#form').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: 'http://219.224.134.225:5000/signUpUser',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    DrawCheck();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    $(".btn").click(function() {
+        $('html, body').animate({
+            scrollTop: $("#result-out").offset().top
+        }, 1000);
+    });
+
+    function DrawCheck() {
+        var start = 100;
+        var mid = 145;
+        var end = 250;
+        var width = 22;
+        var leftX = start;
+        var leftY = start;
+        var rightX = mid - (width / 2.7);
+        var rightY = mid + (width / 2.7);
+        var animationSpeed = 20;
+
+        var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+        ctx.lineWidth = width;
+        ctx.strokeStyle = 'rgba(0, 150, 0, 1)';
+
+        for (i = start; i < mid; i++) {
+            var drawLeft = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(start, start);
+                ctx.lineTo(leftX, leftY);
+                ctx.stroke();
+                leftX++;
+                leftY++;
+            }, 1 + (i * animationSpeed) / 3);
+        }
+
+        for (i = mid; i < end; i++) {
+            var drawRight = window.setTimeout(function () {
+                ctx.beginPath();
+                ctx.moveTo(leftX, leftY);
+                ctx.lineTo(rightX, rightY);
+                ctx.stroke();
+                rightX++;
+                rightY--;
+            }, 1 + (i * animationSpeed) / 3);
+        }
+    }
+</script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
