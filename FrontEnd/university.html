@@ -22,6 +22,7 @@
 
 <body>
 
+<!--navbar-->
 <nav class="navbar transparent navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -38,10 +39,14 @@
                 <li><a href="index.html">Home</a></li>
                 <li class="active"><a href="university.html">I am a professor or university representative</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="nav-username"></a></li>
+            </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
 
+<!--header image-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12" id="header-image">
@@ -49,8 +54,9 @@
     </div>
 </div>
 
+<!--login form-->
 <div class="container">
-    <form id="uni-form">
+    <form id="login-form">
         <div class="first-impression">
             <h1>Do you have an account already?</h1>
             <p class="lead">Please enter your username and password if you have an account</p>
@@ -66,10 +72,12 @@
                 <div class="row">
                     <label for="password" class="col-sm-2 col-sm-offset-3 control-label">Password</label>
                     <div class="col-sm-4">
-
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                 </div>
+            </div>
+            <div id="modal-error-div" style="padding-left: 15px">
+                <p id="modal-error-message"></p>
             </div>
             <div class="form-group">
                 <div class="row">
@@ -85,27 +93,52 @@
     </form>
 </div><!-- /.container -->
 
-<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!--register modal-->
+<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-label">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Register now</h4>
+                <h4 class="modal-title" id="register-label">Register now</h4>
             </div>
-            <form id="form">
+            <form id="register-form">
             <div class="modal-body">
-                    <div class="form-group">
-                        <label for="new-username" class="control-label">Username</label>
-                        <input type="text" class="form-control" id="new-username" name="new-username">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password" class="control-label">Password</label>
-                        <input type="password" class="form-control" id="new-password" name="new-password">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-email" class="control-label">Email</label>
-                        <input type="email" class="form-control" id="new-email" name="new-email">
-                    </div>
+                <div class="form-group">
+                    <select class="form-control" id="new-role" name="new-role" required>
+                        <option>Professor: I am a professor</option>
+                        <option>University Representative: I am a university representative</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="new-uni" name="new-uni" required>
+                        <option>University of California, Berkeley</option>
+                        <option>Stanford University</option>
+                        <option>Carnegie Mellon University</option>
+                        <option>Massachusetts Institute of Technology</option>
+                        <option>Princeton University</option>
+                        <option>Harvard University</option>
+                        <option>Yale University</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="new-username" class="control-label">Username</label>
+                    <input type="text" class="form-control" id="new-username" name="new-username">
+                </div>
+                <div class="form-group">
+                    <label for="new-password" class="control-label">Password</label>
+                    <input type="password" class="form-control" id="new-password" name="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="new-repeat-password" class="control-label">Repeat Password</label>
+                    <input type="password" class="form-control" id="new-repeat-password" name="new-repeat-password">
+                </div>
+                <div class="form-group">
+                    <label for="new-email" class="control-label">Email</label>
+                    <input type="email" class="form-control" id="new-email" name="new-email">
+                </div>
+                <div id="register-error-div" style="padding-left: 15px">
+                    <p id="register-error-message"></p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -116,23 +149,75 @@
     </div>
 </div>
 
+<!--success modal-->
+<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="success-label">Success</h4>
+            </div>
+            <div class="modal-body">
+                Welcome to OfferDB!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(function() {
-        $('#form').submit(function(event) {
+        $('#login-form').submit(function (event) {
             event.preventDefault();
 
             $.ajax({
-                url: 'http://219.224.134.225:5000/signUpUni',
+                url: 'http://192.168.20.91:5000/puLogin',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    if (response == 0) {
+                        $('#success-modal').modal('show');
+                        $('#nav-username').html($('#username').val());
+                        $('#success-modal').modal('show');
+                    }
+                    else {
+                        if (response == -1) {
+                            $('#modal-error-div').attr('class', "alert alert-danger");
+                            $('#modal-error-message').html('The username or password is incorrect.');
+                        }
+                    }
+                },
+                error: function(error) {
+                    $('#modal-error-div').attr('class', "alert alert-danger");
+                    $('#modal-error-message').html('Could not connect to server.');
+                    console.log(error);
+                }
+            });
+        })
+
+        $('#register-form').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: 'http://192.168.20.91:5000/puSignUp',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
                     if(response == 0) {
-                        console.log("success");
-                        window.location.href = "http://stackoverflow.com";
+                        $('#nav-username').html($('#username').val());
+                    }
+                    else {
+                        $('#register-error-div').attr('class', "alert alert-danger");
+                        $('#register-error-message').html('The username or password is incorrect. errno: ' + response);
                     }
                 },
                 error: function(error) {
+                    $('#register-error-div').attr('class', "alert alert-danger");
+                    $('#register-error-message').html('Could not connect to server');
                     console.log(error);
                 }
             });

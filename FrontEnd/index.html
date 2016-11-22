@@ -22,6 +22,7 @@
 
 <body>
 
+<!--navbar-->
 <nav class="navbar transparent navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -39,12 +40,13 @@
                 <li><a href="university.html">I am a professor or university representative</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a id="username">Username</a></li>
+                <li><a id="nav-username">Log In</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
 
+<!--header image-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12" id="header-image">
@@ -52,6 +54,7 @@
     </div>
 </div>
 
+<!--basic information form-->
 <div class="container">
     <form id="form">
         <div class="first-impression">
@@ -138,7 +141,7 @@
     <div class="first-impression " id="result-out">
     <div class="collapse" id="result">
         <h1>I found someone with scores close to you</h1>
-        <p class="lead" id="result-message">He is admitted</p>
+        <p class="lead" id="result-message">He was admitted</p>
         <div class="row">
             <div class="col-sm-4">
                 <img class="img-responsive" src="img/Avatar.jpg">
@@ -187,14 +190,15 @@
     </div>
 
     </div>
-</div><!-- /.container -->
+</div>
 
-<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!--register modal-->
+<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-label">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Register now to access more information</h4>
+                <h4 class="modal-title" id="register-label">Register now to access more information</h4>
             </div>
             <form id="register-form">
                 <div class="modal-body">
@@ -219,6 +223,9 @@
                         <input type="text" class="form-control" id="new-tel" name="new-tel">
                     </div>
                 </div>
+                <div id="register-error-div" style="padding-left: 15px">
+                    <p id="register-error-message"></p>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-danger">Register</button>
@@ -228,6 +235,7 @@
     </div>
 </div>
 
+<!--success modal-->
 <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-label">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -245,19 +253,33 @@
     </div>
 </div>
 
-<div class="modal fade" id="fail-modal" tabindex="-1" role="dialog" aria-labelledby="success-label">
+<!--login modal-->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-label">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="fail-label">Error</h4>
+                <h4 class="modal-title" id="login-label">Log in</h4>
             </div>
-            <div class="modal-body" id="error-message">
-                Please choose another username.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            <form id="login-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="new-username" class="control-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password" class="control-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                </div>
+                <div id="login-error-div" style="padding-left: 15px">
+                    <p id="login-error-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Log In</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -268,13 +290,13 @@
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/signUpUser',
+                url: 'http://192.168.20.91:5000/stdFront',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
                     if (response == 0) {
-                        $('#result-message').html('He is not admitted');
+                        $('#result-message').html('He was not admitted');
                         $('#result-icon').attr("src", "img/Red.jpg");
                     }
                     else {
@@ -283,14 +305,48 @@
                 },
                 error: function(error) {
                     console.log(error);
-                }
+                },
+                timeout: 100
             });
 
             setTimeout(function() {$('#register-modal').modal('show');}, 2000);
         });
 
+        $('#login-form').submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: 'http://192.168.20.91:5000/stdLogin',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    if (response == 0) {
+                        $('#login-modal').modal('hide');
+                        $('#nav-username').html($('#username').val());
+                        $('#success-modal').modal('show');
+                    }
+                    else {
+                        if (response == -1) {
+                            $('#login-error-div').attr('class', "alert alert-danger");
+                            $('#login-error-message').html('The username or password is incorrect. errno: ' + response);
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    $('#login-error-div').attr('class', "alert alert-danger");
+                    $('#login-error-message').html('Could not connect to server');
+                },
+                timeout: 100
+            });
+        })
+
         $('#register-form').submit(function(event) {
             event.preventDefault();
+
+            document.cookie = $('#new-username').val();
+            window.location.href = "university-info.html"
 
             $.ajax({
                 url: 'http://192.168.20.91:5000/stSignUp',
@@ -304,15 +360,16 @@
                         $('#success-modal').modal('show');
                     }
                     else {
-                        if (response == -1) {
-                            $('#fail-modal').modal('show');
-                            //TODO display different error message
-                        }
+                        $('#register-error-div').attr('class', "alert alert-danger");
+                        $('#register-error-message').html('The username or password is incorrect.');
                     }
                 },
                 error: function(error) {
                     console.log(error);
-                }
+                    $('#register-error-div').attr('class', "alert alert-danger");
+                    $('#register-error-message').html('Could not connect to server  ');
+                },
+                timeout: 100
             });
 
         });
@@ -322,6 +379,10 @@
         $('html, body').animate({
             scrollTop: $("#result-out").offset().top
         }, 100);
+    });
+
+    $('#nav-username').click(function() {
+        $('#login-modal').modal('show');
     });
 
     function DrawCheck() {
