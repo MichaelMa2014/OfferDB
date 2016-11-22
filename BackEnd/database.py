@@ -13,10 +13,63 @@ rest = cur.fetchall()
 for r in rest:
             print(r)
 '''
-
+#apply_h_TFR
 
 
 #rest=cur.fetchall()
+
+def check_chq(uniName,score):
+    args1 = (uniName,)
+    rest = []
+    cur.callproc("apply_uni", args1)
+    tot = cur.fetchall()
+    print(tot)
+
+    args = (score[0],uniName)
+    cur.callproc("apply_h_TFR", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0]/tot[0][0])
+
+
+    args = (score[1],uniName)
+    cur.callproc("apply_h_TFL", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+
+    args = (score[2],uniName)
+    cur.callproc("apply_h_TFW", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+
+    args = (score[3],uniName)
+    cur.callproc("apply_h_TFS", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+
+    args = (score[4],uniName)
+    cur.callproc("apply_h_q", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+
+    args = (score[5],uniName)
+    cur.callproc("apply_h_v", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+
+    args = (score[6],uniName)
+    cur.callproc("apply_h_aw", args)
+    ret = cur.fetchall()
+    print(ret)
+    rest.append(100*ret[0][0] / tot[0][0])
+    return rest
+#rest = check_chq("Princeton University",[25,25,25,25,170,170,6])
+#print(rest)
 def get_id(table,col):
     s = "select max({0}) from {1}".format(col,table)
     cur.execute(s)
@@ -98,7 +151,7 @@ def add_user(who_,name,password,email,uni):#professor give id ;school give schoo
     else:
         check = isThere("professor","email = '{0}'".format(email))
         print("in 4")
-        if ~check:
+        if not check:
             return '-3'
         update_itm("professor","userId",id,"email = '{0}'".format(email))
     conn.commit()
@@ -167,6 +220,9 @@ def get_stduser_info(name):
     args = (name,)
     cur.callproc("get_stduser_info_by_name", args)
     ret = cur.fetchall()
+    print(name)
+    print(ret)
+    print("sdfdfsdfsdfsdfsdfsdfsdf")
     r1 = list(ret[0])
     cur.callproc("get_stduser_grade_by_name", args)
     ret = cur.fetchall()
@@ -174,7 +230,16 @@ def get_stduser_info(name):
     r = r1+r2[1:8]
     return r
 
-
+def get_stduser_grade(name):
+    args = (name,)
+    cur.callproc("get_stduser_grade_by_name", args)
+    ret = cur.fetchall()
+    print(ret)
+    r = list(ret[0])
+    return r[1:8]
+#
+# ret = get_stduser_grade("yuanmengyang")
+# print(ret)
 def update_std_grade(name,r,l,s,w,v,q,aw):
     args1=(name,s,r,w,l)
     args2=(name,q,v,aw)
@@ -206,12 +271,120 @@ def findIdealSch(name):
     s = "select idealUni from studentuser where SUserName = '{0}'".format(name)
     cur.execute(s)
     ret = cur.fetchall()
-    print("^^^^^^^^^^^")
-    print(ret[0])
     return ret[0]
 
+def get_graduate_info(pname):
+    args = (pname,)
+    cur.callproc("p_chq_graduate", args)
+    ret = cur.fetchall()
+    retdic = {}
+    i = 1
+    for it in ret:
+        dic = {}
+        dic["no"] = it[10]
+        dic["name"]=it[0]
+        dic["gender"]=it[1]
 
-findIdealSch("")
+
+        dic["GREQuantitative"] = it[2]
+        dic["GREVerbal"] = it[3]
+        dic["GREAW"] = it[4]
+        dic["TOEFLL"] = it[5]
+        dic["TOEFLR"] = it[6]
+        dic["TOEFLW"] = it[7]
+        dic["TOEFLS"] = it[8]
+        dic["uni"] = it[9]
+        graduateId = it[10]
+        s1 = "select count(*) from graduate_publish where graduateId = '{0}'".format(graduateId)
+        cur.execute(s1)
+        result = cur.fetchall()
+        print("&&&& {0}  ***".format(result))
+        dic["paper"] = result[0]
+        retdic["{0}".format(i)]=dic
+        i=i+1
+    return retdic
+
+def get_paper(gradId):
+    print("hhh")
+    #get_paper_info
+    args = (gradId,)
+    cur.callproc("get_paper_info", args)
+    ret = cur.fetchall()
+    retdic = {}
+    i = 1
+    for it in ret:
+        dic = {}
+        dic["no"] = i
+        dic["name"] = it[0]
+        dic["major"] = it[1]
+        dic["citing"] = it[2]
+        retdic["{0}".format(i)] = dic
+        i = i + 1
+        print(ret)
+    return retdic
+
+
+def get_gen_info():
+    s = "select * from general_info"
+    cur.execute(s)
+    rest = cur.fetchall()
+    result = list(rest[0])
+    dic = {}
+    dic["userNo"] = result[3]
+    dic["graduateNo"] = result[0]
+    dic["professorNo"] = result[1]
+    dic["universityNo"] = result[2]
+    return dic
+
+
+def get_graduate_info_by_uni(pname):
+    args = (pname,)
+    cur.callproc("uni_chq_graduate", args)
+    ret = cur.fetchall()
+    retdic = {}
+    i = 1
+    for it in ret:
+        dic = {}
+        dic["no"] = it[10]
+        dic["name"]=it[0]
+        dic["gender"]=it[1]
+
+
+        dic["GREQuantitative"] = it[2]
+        dic["GREVerbal"] = it[3]
+        dic["GREAW"] = it[4]
+        dic["TOEFLL"] = it[5]
+        dic["TOEFLR"] = it[6]
+        dic["TOEFLW"] = it[7]
+        dic["TOEFLS"] = it[8]
+        dic["uni"] = it[9]
+        graduateId = it[10]
+        s1 = "select count(*) from graduate_publish where graduateId = '{0}'".format(graduateId)
+        cur.execute(s1)
+        result = cur.fetchall()
+        print("&&&& {0}  ***".format(result))
+        dic["paper"] = result[0]
+        retdic["{0}".format(i)]=dic
+        i=i+1
+    return retdic
+
+
+def get_CUni_by(id):
+    args = (id,)
+    print("&&&&***(((*&&^^%%%")
+    print(id)
+    print("&&&&***(((*&&^^%%%")
+    cur.callproc("get_Cuni_info", args)
+    rest = cur.fetchall()
+    result = list(rest[0])
+    dic = {}
+    dic["name"] = result[0]
+    dic["rank"] = result[1]
+    dic["homepage"] = result[2]
+    return dic
+
+
+
 #UniSchChq("Princeton University")
 
 #get_stduser_info("Minima")

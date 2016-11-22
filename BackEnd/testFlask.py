@@ -107,6 +107,7 @@ def stSignUp():
 @app.route('/puSignUp', methods=['POST'])
 @crossdomain(origin='*')
 def puSignUp():
+    print("a new signer pu")
     tmp = request.form['new-role']
     if tmp[0]=='P':
         role = "professor"
@@ -190,6 +191,8 @@ def stdLogIn():
 def puLogin():
     name = request.form['username']
     password = request.form['password']
+    print(password)
+    print(name)
     ret = db.pu_log_in(name,password)
     print(name)
     print(type(name))
@@ -292,9 +295,63 @@ def stdCqUni():
     dic["school3"] =r3[4]
     dic["school-rank3"] =r3[5]
     dic["school-salary3"] =r3[6]
+    score_pre = db.get_stduser_grade(name)
+    print("&&&&&&&&&&&&&&&&&&&&&")
+    print(score_pre)
+    score = [score_pre[4],score_pre[3],score_pre[5],score_pre[6],score_pre[0],score_pre[1],score_pre[2]]
+    rest = db.check_chq(uniName,score)
+    dic["percent-TOEFLR"]= rest[0]
+    dic["percent-TOEFLL"] =rest[1]
+    dic["percent-TOEFLS"] =rest[3]
+    dic["percent-TOEFLW"] =rest[2]
+    dic["percent-GREVerbal"] =rest[5]
+    dic["percent-GREQuantitative"] =rest[4]
+    dic["percent-GREAW"] =rest[6]
     return json.dumps(dic)
 
 
+
+@app.route('/professorInfo', methods=['POST'])
+@crossdomain(origin='*')
+def professorInfo():
+    pname = request.form['username']
+    print("in")
+    chq = db.isThere("professor","professorName = '{0}'".format(pname))
+    chq2 = db.isThere("universityus","uniUName='{0}'".format(pname))
+    print("***&&&^^^%%%$$$")
+    print(chq)
+    print(chq2)
+    print("***&&&^^^%%%$$$")
+    if chq:
+        ret = db.get_graduate_info(pname)
+    elif chq2:
+        ret = db.get_graduate_info_by_uni(pname)
+    return json.dumps(ret)
+
+@app.route('/cuniInfo', methods=['POST'])
+@crossdomain(origin='*')
+def cuniInfo():
+    print("in")
+    id = request.form['graduateId']
+    ret = db.get_CUni_by(id)
+    return json.dumps(ret)
+
+
+@app.route('/paperInfo', methods=['POST'])
+@crossdomain(origin='*')
+def paperInfo():
+    print("in paper")
+    id = request.form['graduateId']
+    ret = db.get_paper(id)
+    return json.dumps(ret)
+
+@app.route('/generalInfo',methods=['POST'])
+@crossdomain(origin='*')
+def generalInfo():
+    print("in general")
+
+    ret = db.get_gen_info()
+    return json.dumps(ret)
 
 
 
