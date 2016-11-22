@@ -1,0 +1,3 @@
+TO DO:
+professor(professorId, professorName, professorHomepage,professorMajor, userId, schoolId)中：
+增加 uniUId 取消userId
