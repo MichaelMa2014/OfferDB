@@ -150,6 +150,51 @@
                     </td>
                     <td></td>
                 </tr>
+                <tr class="active">
+                    <td>
+                        Complete your information
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col-sm-8">
+                            <form id="info-form">
+                                <div class="form-group row">
+                                    <label for="old-password", class="col-sm-4 control-label">Your university</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <select class="form-control" id="uni" name="uni" required>
+                                                <option>Beihang University</option>
+                                                <option>Peking University</option>
+                                                <option>Tsinghua University</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="new-password", class="col-sm-4 control-label">New Password</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" class="col-sm-4 form-control" id="new-password" name="new-password"><br>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="new-repeat-password", class="col-sm-4 control-label">Repeat Password</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" class="col-sm-4 form-control" id="new-repeat-password" name="new-repeat-password"><br>
+                                    </div>
+                                </div>
+                                <div id="password-error-div" style="padding-left: 15px">
+                                    <p id="password-error-message"></p>
+                                </div>
+                                <button id="password-submit-button" type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
             </table>
         </div>
     </div>
@@ -210,7 +255,31 @@
     </div>
 </div>
 
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted" id="general-info">Place sticky footer content here.</p>
+    </div>
+</footer>
+
 <script>
+    function load_general_info() {
+        $.ajax({
+            url: 'http://192.168.20.91:5000/generalInfo',
+            data: '',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+
+                $('#general-info').html('OfferDB: ' + data['userNo'] + ' Users, ' + data['graduateNo'] + ' Graduates, ' + data['professorNo'] + ' Professors, ' + data['universityNo'] + ' Universities');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
     function load_grades() {
         $.ajax({
             url: 'http://192.168.20.91:5000/stdCheck',
@@ -239,6 +308,8 @@
     }
 
     $(function() {
+//        window.setInterval(load_general_info, 1000);
+
         $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
 
         $('#username').val(document.cookie.split(';')[0].split('=')[1]);
