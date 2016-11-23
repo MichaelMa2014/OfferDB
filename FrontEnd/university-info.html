@@ -187,13 +187,14 @@
             },
             error: function(error) {
                 console.log(error);
-            }
+            },
+            timeout: 100
         });
     }
 
     $(function() {
         load_general_info();
-//        window.setInterval(load_general_info, 1000);
+        window.setInterval(load_general_info, 1000);
 
         $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
 
