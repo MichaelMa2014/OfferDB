@@ -39,6 +39,9 @@
                 <li><a href="index.html">Home</a></li>
                 <li class="active"><a href="university.html">I am a professor or university representative</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="nav-username"></a></li>
+            </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
@@ -52,33 +55,209 @@
 </div>
 
 <div class="container">
-
+    <table id="student-table" class="table">
+        <tr class="active">
+            <td>No.</td>
+            <td>Name</td>
+            <td>Gender</td>
+            <td>GRE Verbal</td>
+            <td>GRE Quantitative</td>
+            <td>GRE Analytical Writing</td>
+            <td>TOEFL Reading</td>
+            <td>TOEFL Listening</td>
+            <td>TOEFL Speaking</td>
+            <td>TOEFL Writing</td>
+            <td>Graduated From</td>
+            <td>Number of Papers</td>
+        </tr>
+    </table>
 </div>
 
+<div class="modal fade" id="uni-modal" tabindex="-1" role="dialog" aria-labelledby="uni-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="uni-label"></h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr class="active">
+                        <td id="uni-name"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Homepage</td>
+                        <td id="uni-homepage"></td>
+                    </tr>
+                    <tr>
+                        <td>Rank</td>
+                        <td id="uni-rank"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="paper-modal" tabindex="-1" role="dialog" aria-labelledby="paper-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="paper-label">Paper</h4>
+            </div>
+            <div class="modal-body">
+                <table id="paper-table" class="table">
+                    <tr class="active">
+                        <td>No.</td>
+                        <td>Name</td>
+                        <td>Major</td>
+                        <td>Number of Citing</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted" id="general-info">Place sticky footer content here.</p>
+    </div>
+</footer>
 
 
 <script>
-    $(function() {
-        $('#form').submit(function(event) {
-            event.preventDefault();
+    function load_general_info() {
+        $.ajax({
+            url: 'http://169.254.43.98:5000/generalInfo',
+            data: '',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
 
-            $.ajax({
-                url: 'http://219.224.134.225:5000/signUpUni',
-                data: $('form').serialize(),
-                type: 'POST',
-                success: function(response) {
-                    console.log(response);
-                    if(response == 0) {
-                        console.log("success");
-                        window.location.href = "http://stackoverflow.com";
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+                var data = JSON.parse(response);
+
+                $('#general-info').html('OfferDB: ' + data['userNo'] + ' Users, ' + data['graduateNo'] + ' Graduates, ' + data['professorNo'] + ' Professors, ' + data['universityNo'] + ' Universities');
+            },
+            error: function(error) {
+                console.log(error);
+            },
+            timeout: 100
         });
+    }
+
+    $(function() {
+        load_general_info();
+        window.setInterval(load_general_info, 10000);
+
+        $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
+
+        $.ajax({
+            url: 'http://169.254.43.98:5000/professorInfo',
+            data: 'username=' + document.cookie.split(';')[0].split('=')[1],
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+
+                for (var r in data) {
+                    console.log(data[r]);
+
+                    $('#student-table').append('<tr>' +
+                        '<td class="no">' + data[r]['no'] + '</td>' +
+                        '<td>' + data[r]['name'] + '</td>' +
+                        '<td>' + data[r]['gender'] + '</td>' +
+                        '<td>' + data[r]['GREVerbal'] + '</td>' +
+                        '<td>' + data[r]['GREQuantitative'] + '</td>' +
+                        '<td>' + data[r]['GREAW'] + '</td>' +
+                        '<td>' + data[r]['TOEFLR'] + '</td>' +
+                        '<td>' + data[r]['TOEFLL'] + '</td>' +
+                        '<td>' + data[r]['TOEFLS'] + '</td>' +
+                        '<td>' + data[r]['TOEFLW'] + '</td>' +
+                        '<td><a class="uni">' + data[r]['uni'] + '</a></td>' +
+                        '<td><a class="paper">' + data[r]['paper'] + '</a></td>' +
+                        '</tr>')
+                }
+
+                $('.uni').click(function () {
+                    console.log(".uni click");
+                    $('#uni-modal').modal('show');
+
+                    console.log($(this).parent().parent().children().html());
+
+                    $.ajax({
+                        url: 'http://169.254.43.98:5000/cuniInfo',
+                        data: 'graduateId=' + $(this).parent().parent().children().html(),
+                        type: 'POST',
+                        success: function(response) {
+                            console.log(response);
+
+                            var data = JSON.parse(response);
+
+                            $('#uni-label').html(data['name']);
+                            $('#uni-name').html(data['name']);
+                            $('#uni-homepage').html(data['homepage']);
+                            $('#uni-rank').html(data['rank']);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        },
+                        timeout: 100
+                    });
+                });
+
+                $('.paper').click(function () {
+                    console.log('.paper click');
+                    $('#paper-modal').modal('show');
+
+                    console.log($(this).parent().parent().children().html());
+
+                    $.ajax({
+                        url: 'http://169.254.43.98:5000/paperInfo',
+                        data: 'graduateId=' + $(this).parent().parent().children().html(),
+                        type: 'POST',
+                        success: function(response) {
+                            console.log(response);
+
+                            var data = JSON.parse(response);
+
+                            $('#paper-table').empty();
+                            for (var r in data) {
+                                $('#paper-table').append('<tr>' +
+                                    '<td>' + data[r]['no'] + '</td>' +
+                                    '<td>' + data[r]['name'] + '</td>' +
+                                    '<td>' + data[r]['major'] + '</td>' +
+                                    '<td>' + data[r]['citing'] + '</td>' +
+                                    '</tr>')
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        },
+                        timeout: 100
+                    });
+                })
+            },
+            error: function(error) {
+                console.log(error);
+            },
+            timeout: 100
+        });
+
+
     });
+
+
+
 </script>
 
 

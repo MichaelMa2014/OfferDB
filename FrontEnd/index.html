@@ -149,35 +149,35 @@
             <div class="col-sm-6" style="text-align: left;">
                 <table class="table">
                     <tr class="active">
-                        <td>John Appleseed</td>
+                        <td id="result-name">John Appleseed</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>GRE Verbal</td>
+                        <td id="result-GREVerbal">GRE Verbal</td>
                         <td>168</td>
                     </tr>
                     <tr>
-                        <td>GRE Quantitative</td>
+                        <td id="result-GREQuantitative">GRE Quantitative</td>
                         <td>170</td>
                     </tr>
                     <tr>
-                        <td>GRE Analytical Writing</td>
+                        <td id="result-GREAW">GRE Analytical Writing</td>
                         <td>5</td>
                     </tr>
                     <tr>
-                        <td>TOEFL Reading</td>
+                        <td id="result-TOEFLR">TOEFL Reading</td>
                         <td>30</td>
                     </tr>
                     <tr>
-                        <td>TOEFL Listening</td>
+                        <td id="result-TOEFLL">TOEFL Listening</td>
                         <td>30</td>
                     </tr>
                     <tr>
-                        <td>TOEFL Speaking</td>
+                        <td id="result-TOEFLS">TOEFL Speaking</td>
                         <td>24</td>
                     </tr>
                     <tr>
-                        <td>TOEFL Writing</td>
+                        <td id="result-TOEFLW">TOEFL Writing</td>
                         <td>25</td>
                     </tr>
                 </table>
@@ -284,29 +284,69 @@
     </div>
 </div>
 
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted" id="general-info">Place sticky footer content here.</p>
+    </div>
+</footer>
+
 <script>
+    function load_general_info() {
+        $.ajax({
+            url: 'http://169.254.43.98:5000/generalInfo',
+            data: '',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+
+                $('#general-info').html('OfferDB: ' + data['userNo'] + ' Users, ' + data['graduateNo'] + ' Graduates, ' + data['professorNo'] + ' Professors, ' + data['universityNo'] + ' Universities');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
     $(function() {
+        load_general_info();
+        window.setInterval(load_general_info, 10000);
+
         $('#form').submit(function(event) {
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/stdFront',
+                url: 'http://169.254.43.98:5000/stdFront',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
-                    if (response == 0) {
+
+                    var data = JSON.parse(response);
+
+                    if (data['admitted'] == 0) {
                         $('#result-message').html('He was not admitted');
                         $('#result-icon').attr("src", "img/Red.jpg");
                     }
                     else {
                         DrawCheck();
                     }
+
+                    $('#result-name').html(data['graduate-name']);
+                    $('#result-GREVerbal').html(data['GREVerbal']);
+                    $('#result-GREQuantitative').html(data['GREQuantitative']);
+                    $('#result-GREAW').html(data['GREAW']);
+                    $('#result-TOEFLR').html(data['TOEFLR']);
+                    $('#result-TOEFLL').html(data['TOEFLL']);
+                    $('#result-TOEFLS').html(data['TOEFLS']);
+                    $('#result-TOEFLW').html(data['TOEFLW']);
+
                 },
                 error: function(error) {
                     console.log(error);
                 },
-                timeout: 100
+                timeout: 1000
             });
 
             setTimeout(function() {$('#register-modal').modal('show');}, 5000);
@@ -316,7 +356,7 @@
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/stdLogin',
+                url: 'http://169.254.43.98:5000/stdLogin',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
@@ -325,9 +365,8 @@
                         $('#login-modal').modal('hide');
                         $('#nav-username').html($('#username').val());
                         $('#nav-username').attr('href', 'user.html');
-                        $('#success-modal').modal('show');
                         document.cookie="username="+$('#username').val();
-                        window.location.href = 'university-info.html';
+                        window.location.href='university-info.html';
                     }
                     else {
                         if (response == -1) {
@@ -341,7 +380,7 @@
                     $('#login-error-div').attr('class', "alert alert-danger");
                     $('#login-error-message').html('Could not connect to server.');
                 },
-                timeout: 100
+                timeout: 1000
             });
         })
 
@@ -349,7 +388,7 @@
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/stSignUp',
+                url: 'http://169.254.43.98:5000/stSignUp',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {
@@ -372,7 +411,7 @@
                     $('#register-error-div').attr('class', "alert alert-danger");
                     $('#register-error-message').html('Could not connect to server.');
                 },
-                timeout: 100
+                timeout: 1000
             });
         });
     });
