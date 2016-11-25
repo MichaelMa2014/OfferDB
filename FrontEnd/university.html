@@ -142,7 +142,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-danger">Register</button>
             </div>
             </form>
         </div>
@@ -176,7 +176,7 @@
 <script>
     function load_general_info() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/generalInfo',
+            url: 'http://169.254.43.98:5000/generalInfo',
             data: '',
             type: 'POST',
             success: function(response) {
@@ -195,13 +195,13 @@
 
     $(function() {
         load_general_info();
-        window.setInterval(load_general_info, 1000);
+        window.setInterval(load_general_info, 10000);
 
         $('#login-form').submit(function (event) {
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/puLogin',
+                url: 'http://169.254.43.98:5000/puLogin',
                 data: $('#login-form').serialize(),
                 type: 'POST',
                 success: function(response) {
@@ -232,7 +232,7 @@
             event.preventDefault();
 
             $.ajax({
-                url: 'http://192.168.20.91:5000/puSignUp',
+                url: 'http://169.254.43.98:5000/puSignUp',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response) {

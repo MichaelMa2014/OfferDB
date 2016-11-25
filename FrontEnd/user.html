@@ -264,7 +264,7 @@
 <script>
     function load_general_info() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/generalInfo',
+            url: 'http://169.254.43.98:5000/generalInfo',
             data: '',
             type: 'POST',
             success: function(response) {
@@ -283,7 +283,7 @@
 
     function load_grades() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/stdCheck',
+            url: 'http://169.254.43.98:5000/stdCheck',
             data: 'username=' + document.cookie.split(';')[0].split('=')[1],
             type: 'GET',
             success: function(response) {
@@ -310,7 +310,7 @@
 
     $(function() {
         load_general_info();
-        window.setInterval(load_general_info, 1000);
+        window.setInterval(load_general_info, 10000);
 
         $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
 
@@ -322,7 +322,7 @@
         event.preventDefault();
 
         $.ajax({
-            url: 'http://192.168.20.91:5000/stdUpgrade',
+            url: 'http://169.254.43.98:5000/stdUpgrade',
             data: 'username=' + document.cookie.split(';')[0].split('=')[1] + '&' + $('#edit-grades-form').serialize(),
             type: 'POST',
             success: function(response) {
@@ -349,7 +349,7 @@
         event.preventDefault();
 
         $.ajax({
-            url: 'http://192.168.20.91:5000/stdUpPass',
+            url: 'http://169.254.43.98:5000/stdUpPass',
             data: 'username=' + document.cookie.split(';')[0].split('=')[1] + '&' + $('#password-form').serialize(),
             type: 'POST',
             success: function(response) {

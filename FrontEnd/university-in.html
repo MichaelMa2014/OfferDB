@@ -137,7 +137,7 @@
 <script>
     function load_general_info() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/generalInfo',
+            url: 'http://169.254.43.98:5000/generalInfo',
             data: '',
             type: 'POST',
             success: function(response) {
@@ -156,12 +156,12 @@
 
     $(function() {
         load_general_info();
-        window.setInterval(load_general_info, 1000);
+        window.setInterval(load_general_info, 10000);
 
         $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
 
         $.ajax({
-            url: 'http://192.168.20.91:5000/professorInfo',
+            url: 'http://169.254.43.98:5000/professorInfo',
             data: 'username=' + document.cookie.split(';')[0].split('=')[1],
             type: 'POST',
             success: function(response) {
@@ -195,7 +195,7 @@
                     console.log($(this).parent().parent().children().html());
 
                     $.ajax({
-                        url: 'http://192.168.20.91:5000/cuniInfo',
+                        url: 'http://169.254.43.98:5000/cuniInfo',
                         data: 'graduateId=' + $(this).parent().parent().children().html(),
                         type: 'POST',
                         success: function(response) {
@@ -222,7 +222,7 @@
                     console.log($(this).parent().parent().children().html());
 
                     $.ajax({
-                        url: 'http://192.168.20.91:5000/paperInfo',
+                        url: 'http://169.254.43.98:5000/paperInfo',
                         data: 'graduateId=' + $(this).parent().parent().children().html(),
                         type: 'POST',
                         success: function(response) {

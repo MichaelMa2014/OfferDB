@@ -175,7 +175,7 @@
 <script>
     function load_general_info() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/generalInfo',
+            url: 'http://169.254.43.98:5000/generalInfo',
             data: '',
             type: 'POST',
             success: function(response) {
@@ -188,13 +188,13 @@
             error: function(error) {
                 console.log(error);
             },
-            timeout: 100
+            timeout: 1000
         });
     }
 
     $(function() {
         load_general_info();
-        window.setInterval(load_general_info, 1000);
+        window.setInterval(load_general_info, 10000);
 
         $('#nav-username').html(document.cookie.split(';')[0].split('=')[1]);
 
@@ -203,7 +203,7 @@
 
     function load_percent() {
         $.ajax({
-            url: 'http://192.168.20.91:5000/stdCqUni',
+            url: 'http://169.254.43.98:5000/stdCqUni',
             data: 'username=' + document.cookie.split(';')[0].split('=')[1],
             type: 'POST',
             success: function(response) {
@@ -225,18 +225,18 @@
                 $('#school-rank3').html(response['school-rank3'])
                 $('#school-salary3').html(response['school-salary3'])
 
-                $('#percent-GREVerbal').attr('style', 'width:' + response['percent-GREVerbal'] + '%;').html(response['percent-GREVerbal'] + '%');
-                $('#percent-GREQuantitative').attr('style', 'width:' + response['percent-GREQuantitative'] + '%;').html(response['percent-GREQuantitative'] + '%');
-                $('#percent-GREAW').attr('style', 'width:' + response['percent-GREAW'] + '%;').html(response['percent-GREAW'] + '%');
-                $('#percent-TOEFLR').attr('style', 'width:' + response['percent-TOEFLR'] + '%;').html(response['percent-TOEFLR'] + '%');
-                $('#percent-TOEFLL').attr('style', 'width:' + response['percent-TOEFLL'] + '%;').html(response['percent-TOEFLL'] + '%');
-                $('#percent-TOEFLS').attr('style', 'width:' + response['percent-TOEFLS'] + '%;').html(response['percent-TOEFLS'] + '%');
-                $('#percent-TOEFLW').attr('style', 'width:' + response['percent-TOEFLW'] + '%;').html(response['percent-TOEFLW'] + '%');
+                $('#percent-GREVerbal').attr('style', 'min-width: 2em; width:' + response['percent-GREVerbal'] + '%;').html(response['percent-GREVerbal'] + '%');
+                $('#percent-GREQuantitative').attr('style', 'min-width: 2em; width:' + response['percent-GREQuantitative'] + '%;').html(response['percent-GREQuantitative'] + '%');
+                $('#percent-GREAW').attr('style', 'min-width: 2em; width:' + response['percent-GREAW'] + '%;').html(response['percent-GREAW'] + '%');
+                $('#percent-TOEFLR').attr('style', 'min-width: 2em; width:' + response['percent-TOEFLR'] + '%;').html(response['percent-TOEFLR'] + '%');
+                $('#percent-TOEFLL').attr('style', 'min-width: 2em; width:' + response['percent-TOEFLL'] + '%;').html(response['percent-TOEFLL'] + '%');
+                $('#percent-TOEFLS').attr('style', 'min-width: 2em; width:' + response['percent-TOEFLS'] + '%;').html(response['percent-TOEFLS'] + '%');
+                $('#percent-TOEFLW').attr('style', 'min-width: 2em; width:' + response['percent-TOEFLW'] + '%;').html(response['percent-TOEFLW'] + '%');
             },
             error: function(error) {
                 console.log(error);
             },
-            timeout: 100
+            timeout: 1000
         });
     }
 </script>
